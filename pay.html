@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en" class="h-full">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Payment</title>
+  
+  <link rel="stylesheet" href="pay.css">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lucide@0.263.0/dist/umd/lucide.min.js"></script>
+  <script src="/_sdk/element_sdk.js"></script>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+</head>
+<body class="h-full">
+  <div id="app" class="h-full w-full overflow-auto" style="background: linear-gradient(135deg, #0f0f1a 0%, #1a1a2e 40%, #16213e 100%);">
+    <div class="min-h-full flex flex-col items-center justify-center px-4 py-10">
+      
+      <div class="text-center mb-8 fade-up">
+        <div class="inline-flex items-center gap-2 bg-indigo-500/10 border border-indigo-500/20 rounded-full px-4 py-1.5 mb-4">
+          <i data-lucide="shield-check" style="width:16px;height:16px;color:#818cf8;"></i> 
+          <span class="text-indigo-300 text-sm font-medium">Secure Payment</span>
+        </div>
+        <h1 id="pageTitle" class="text-3xl md:text-4xl font-bold text-white mb-2">Complete Your Payment</h1>
+        <p id="instrText" class="text-slate-400">Scan the QR code below to pay</p>
+      </div>
+      
+      <div class="w-full max-w-md fade-up fade-up-d1">
+        <div class="bg-white/5 backdrop-blur border border-white/10 rounded-2xl p-6 mb-6">
+          
+          <div class="text-center mb-6">
+            <p class="text-slate-400 text-sm mb-1">Amount to Pay</p>
+            <div class="flex items-center justify-center gap-2">
+              <span id="originalPrice" class="text-4xl font-bold text-white">₹29</span> 
+              <span id="discountedPrice" class="text-4xl font-bold text-emerald-400 hidden"></span> 
+              <span id="strikePrice" class="text-xl text-slate-500 line-through hidden"></span>
+            </div>
+            <div id="discountBadge" class="hidden mt-2 inline-flex items-center gap-1 bg-emerald-500/15 border border-emerald-500/30 rounded-full px-3 py-1">
+              <i data-lucide="tag" style="width:14px;height:14px;color:#34d399;"></i> 
+              <span class="text-emerald-400 text-sm font-medium">6% OFF Applied!</span>
+            </div>
+          </div>
+          
+          <div class="flex justify-center mb-6">
+            <div class="bg-white rounded-2xl p-4 pulse-glow">
+              <img id="qrImage" src="WhatsApp Image 2026-04-24 at 12.03.13 AM.jpeg" alt="Payment QR Code" loading="lazy" style="width:180px;height:180px;border-radius:8px;" onerror="console.error('QR image failed to load:', this.src); this.style.background='#e5e7eb'; this.alt='QR Code unavailable';">
+            </div>
+          </div>
+          <p class="text-center text-slate-500 text-xs mb-4">Scan with any UPI app (GPay, PhonePe, Paytm)</p>
+          
+          <div class="mb-4 fade-up fade-up-d2">
+            <div class="flex gap-2">
+              <div class="flex-1 relative">
+                <input id="promoInput" type="text" placeholder="Enter promo code" class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-slate-500 text-sm focus:outline-none focus:border-indigo-500/50 transition uppercase tracking-wider">
+              </div>
+              <button id="promoBtn" onclick="applyPromo()" class="bg-indigo-500 hover:bg-indigo-600 text-white font-semibold px-5 py-3 rounded-xl text-sm transition-all active:scale-95"> Apply </button>
+            </div>
+            <p id="promoMsg" class="text-sm mt-2 hidden"></p>
+          </div>
+        </div>
+        
+        <div class="bg-white/5 backdrop-blur border border-white/10 rounded-2xl p-6 mb-6 fade-up fade-up-d3">
+          <h3 class="text-white font-semibold mb-4 flex items-center gap-2"><i data-lucide="list-ordered" style="width:18px;height:18px;color:#818cf8;"></i> How to Complete Payment</h3>
+          <div class="space-y-3">
+            <div class="flex items-start gap-3">
+              <span class="flex-shrink-0 w-7 h-7 rounded-full bg-indigo-500/20 text-indigo-400 text-sm font-bold flex items-center justify-center">1</span>
+              <p class="text-slate-300 text-sm pt-0.5">Scan the QR code above using any UPI app</p>
+            </div>
+            <div class="flex items-start gap-3">
+              <span class="flex-shrink-0 w-7 h-7 rounded-full bg-indigo-500/20 text-indigo-400 text-sm font-bold flex items-center justify-center">2</span>
+              <p class="text-slate-300 text-sm pt-0.5">Pay <span id="stepAmount" class="text-white font-semibold">₹29</span> to complete the transaction</p>
+            </div>
+            <div class="flex items-start gap-3">
+              <span class="flex-shrink-0 w-7 h-7 rounded-full bg-indigo-500/20 text-indigo-400 text-sm font-bold flex items-center justify-center">3</span>
+              <p class="text-slate-300 text-sm pt-0.5">Take a screenshot of your payment confirmation</p>
+            </div>
+            <div class="flex items-start gap-3">
+              <span class="flex-shrink-0 w-7 h-7 rounded-full bg-indigo-500/20 text-indigo-400 text-sm font-bold flex items-center justify-center">4</span>
+              <p class="text-slate-300 text-sm pt-0.5">Upload the screenshot via Telegram below</p>
+            </div>
+          </div>
+        </div>
+        
+        <div class="fade-up fade-up-d4">
+          <a href="https://t.me/gagggg9" target="_blank" rel="noopener noreferrer" class="flex items-center justify-center gap-3 w-full bg-gradient-to-r from-[#2AABEE] to-[#229ED9] hover:from-[#229ED9] hover:to-[#1E8FC7] text-white font-bold py-4 rounded-2xl text-lg transition-all active:scale-[0.98] shadow-lg shadow-sky-500/20">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z" />
+            </svg> Upload Screenshot on Telegram 
+          </a>
+          <p class="text-center text-slate-500 text-xs mt-3">Opens Telegram — send your payment screenshot there</p>
+        </div>
+      </div>
+    </div>
+    
+    <div id="toast" class="fixed bottom-6 left-1/2 -translate-x-1/2 bg-white/10 backdrop-blur border border-white/20 rounded-xl px-5 py-3 text-white text-sm font-medium hidden z-50"></div>
+  </div>
+
+  <script src="pay.js"></script>
+</body>
+</html>
